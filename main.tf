@@ -53,7 +53,8 @@ resource "azurerm_linux_virtual_machine" "example" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = file("kluczyk.pub")
+    # Pass here your public key path.
+    public_key = file("mykey.pub")
   }
 
   os_disk {
@@ -66,6 +67,24 @@ resource "azurerm_linux_virtual_machine" "example" {
     offer     = "0001-com-ubuntu-server-focal"
     sku       = "20_04-lts-gen2"
     version   = "latest"
+  }
+
+  provisioner "remote-exec" {    
+    inline = [
+      "sudo apt update",
+      "curl -fsSL https://get.docker.com -o get-docker.sh",
+      "sh get-docker.sh",
+      "sudo usermod -aG docker adminuser",
+      "rm get-docker.sh"
+    ]
+
+    connection {
+      type     = "ssh"
+      user     = azurerm_linux_virtual_machine.example.admin_username
+      host     = azurerm_linux_virtual_machine.example.public_ip_address
+      # Pass here your private key path.
+      private_key = file("mykey")
+  }
   }
 }
 

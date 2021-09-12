@@ -1,10 +1,16 @@
-
 # Azure VM with Terraform
 
-A brief description of what this project does and who it's for
+Ubuntu Server 20.04 VM created with Terraform on Azure Cloud. Public key needs to be added to main.tf file. 
+```terraform
+public_key = file("mykey.pub")
+```
+Then you can connect with your VM via SSH and private key:
+```linux
+ssh -i mykey adminuser@vm_public_ip
+```
+Additionaly Docker will be istalled on VM via remote exec. 
 
-
-## SSH key pair generation 
+### SSH key pair generation 
 
 ![App Screenshot](https://i.ytimg.com/vi/2HnJFOMewJE/maxresdefault.jpg)
 
@@ -13,5 +19,5 @@ Linux command for keypair generation
 ssh-keygen -t rsa -f mykey
 ```
 
-mykey.pub injected to VM \
-mykey used for SSH connection 
+**mykey.pub** will be injected to VM \
+**mykey** will be used for SSH connection 
